@@ -22,7 +22,7 @@ int main ( int argc, char ** argv ) {
 
   hgcPlotting->Save();
 
-
+  delete hgcPlotting;
 
 
 

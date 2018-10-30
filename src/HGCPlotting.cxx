@@ -4,7 +4,7 @@ Samuel Webb
 Imperial College
 ***************************************************************************/
 
-// Time-stamp: <2018-10-30 13:01:08 (snwebb)>
+// Time-stamp: <2018-10-30 17:03:43 (snwebb)>
 
 #include "HGCPlotting.h"
 
@@ -22,11 +22,11 @@ HGCPlotting::~HGCPlotting() {
 
   gDirectory = _origDir ;
 
-  // for(auto &it1 : _cloned_stacks) {
-  //   for(auto &it2 : it1.second) {
-  //     it2.second->Delete();
-  //   }
-  // }
+  for(auto &it1 : _cloned_hists) {
+    for(auto &it2 : it1.second) {
+      it2.second->Delete();
+    }
+  }
 
 }
 
@@ -46,9 +46,30 @@ void HGCPlotting::SetupFillHistograms(){
     if (FileExists( (_in_directory + "/ntuples/ntuple_" + std::to_string(i) + ".root"   ).c_str()  )  )   
       _chain  ->Add ( (_in_directory + "/ntuples/ntuple_" + std::to_string(i) + ".root"   ).c_str() );
   }
+
+
+
+
+  MakeAllHistograms();
+
+
+
+
  
 }
 
+
+void HGCPlotting::MakeAllHistograms(){
+
+  std::cout << "Creating All Histograms" << std::endl;
+
+
+
+
+  _cloned_hists[ "Default" ] [ "tc_n" ] = new TH1D ( "default_tc_n", "", 100,0,1000 );
+  
+
+}
 
 void HGCPlotting::Fill(){
 
@@ -71,6 +92,10 @@ void HGCPlotting::Loop( ){
   Long64_t nentries = fChain->GetEntries();
   Long64_t nbytes = 0, nb = 0;
 
+  fChain->SetBranchStatus("*",0);
+
+  fChain->SetBranchStatus("tc_n",1);
+
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
     Long64_t ientry = LoadTree(jentry);
@@ -82,10 +107,24 @@ void HGCPlotting::Loop( ){
     }
 
 
-    std::cout << event << std::endl;
+    //    std::cout << event << std::endl;
+
+
+
+    FillAllHists( "Default" );
+
+
 
 
   }
+
+
+}
+
+void HGCPlotting::FillAllHists( std::string name ){
+
+  
+  _cloned_hists[ name ] [ "tc_n" ] ->Fill ( tc_n );
 
 
 }
@@ -102,8 +141,18 @@ bool HGCPlotting::FileExists( std::string file ){
 
 void HGCPlotting::Save(){
 
+  
+  TFile * f_hists = new TFile(  (_out_directory + "/output.root").c_str(), "RECREATE" );
  
- 
+  for(auto &it1 : _cloned_hists) {
+    for(auto &it2 : it1.second) {
+      it2.second->Write();
+    }
+  }
+  
+  f_hists->Close();
+
+
 }
 
 

@@ -47,6 +47,14 @@ class HGCPlotting : public BuildTreeBase {
   TChain * _chain    ;  
 
 
+
+  typedef std::map< std::string, TH1D* > histmap;
+  typedef std::map< std::string, histmap > clonemap;
+
+  clonemap _cloned_hists;
+
+
+
  public :
   HGCPlotting( CmdLine * cmd );
   ~HGCPlotting();
@@ -55,9 +63,13 @@ class HGCPlotting : public BuildTreeBase {
 
   void SetupFillHistograms();
 
+  void MakeAllHistograms();
+
   void Loop();
 
   void Fill();
+
+  void FillAllHists( std::string name );
 
   bool FileExists( std::string file );
 
