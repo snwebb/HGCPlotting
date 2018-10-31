@@ -4,7 +4,7 @@ Samuel Webb
 Imperial College
 ***************************************************************************/
 
-// Time-stamp: <2018-10-31 10:42:07 (snwebb)>
+// Time-stamp: <2018-10-31 13:15:04 (snwebb)>
 
 #include "HGCPlotting.h"
 
@@ -14,7 +14,7 @@ HGCPlotting::HGCPlotting( CmdLine * cmd ){
   _origDir = gDirectory ;
   _in_directory = _cmd->string_val( "--in_directory" ) ;
   _out_directory = _cmd->string_val( "--out_directory" ) ;
-
+  _max_events =  _cmd->int_val( "--max_events"  , -1);
 }
 
 
@@ -96,10 +96,9 @@ void HGCPlotting::Loop( ){
       std::cout << jentry << "/" << nentries  << "\n" ;
     }
 
-
-    //    std::cout << event << std::endl;
-
-
+    if ( _max_events != -1 ){
+      if ( jentry > _max_events ) break;
+    }
 
     FillAllHists( "Default" );
 

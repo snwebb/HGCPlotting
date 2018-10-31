@@ -43,7 +43,7 @@ class HGCPlotting : public BuildTreeBase {
   std::string _out_directory;
   TDirectory * _origDir ;
   
-
+  int _max_events;
 
   TChain * _chain    ;  
 
