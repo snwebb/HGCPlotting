@@ -32,6 +32,7 @@ Imperial College
 #include <TLatex.h>
 #include <sys/stat.h>
 #include <iomanip>
+#include <cmath>
 
 class HGCPlotting : public BuildTreeBase {
  private :
@@ -50,8 +51,10 @@ class HGCPlotting : public BuildTreeBase {
 
   typedef std::map< std::string, TH1D* > histmap;
   typedef std::map< std::string, histmap > clonemap;
+  typedef std::map< std::string, double > doublemap;
 
   clonemap _cloned_hists;
+  doublemap _event_variables;
 
 
 
@@ -68,6 +71,8 @@ class HGCPlotting : public BuildTreeBase {
   void Loop();
 
   void Fill();
+
+  void CalculateVariables();
 
   void FillAllHists( std::string name );
 

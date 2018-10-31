@@ -4,7 +4,7 @@ Samuel Webb
 Imperial College
 ***************************************************************************/
 
-// Time-stamp: <2018-10-30 17:03:43 (snwebb)>
+// Time-stamp: <2018-10-31 10:42:07 (snwebb)>
 
 #include "HGCPlotting.h"
 
@@ -59,18 +59,6 @@ void HGCPlotting::SetupFillHistograms(){
 }
 
 
-void HGCPlotting::MakeAllHistograms(){
-
-  std::cout << "Creating All Histograms" << std::endl;
-
-
-
-
-  _cloned_hists[ "Default" ] [ "tc_n" ] = new TH1D ( "default_tc_n", "", 100,0,1000 );
-  
-
-}
-
 void HGCPlotting::Fill(){
 
   Init(  _chain );
@@ -95,6 +83,8 @@ void HGCPlotting::Loop( ){
   fChain->SetBranchStatus("*",0);
 
   fChain->SetBranchStatus("tc_n",1);
+  fChain->SetBranchStatus("tc_pt",1);
+  fChain->SetBranchStatus("tc_phi",1);
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -121,13 +111,6 @@ void HGCPlotting::Loop( ){
 
 }
 
-void HGCPlotting::FillAllHists( std::string name ){
-
-  
-  _cloned_hists[ name ] [ "tc_n" ] ->Fill ( tc_n );
-
-
-}
 
 bool HGCPlotting::FileExists( std::string file ){
 
@@ -141,8 +124,9 @@ bool HGCPlotting::FileExists( std::string file ){
 
 void HGCPlotting::Save(){
 
-  
-  TFile * f_hists = new TFile(  (_out_directory + "/output.root").c_str(), "RECREATE" );
+
+  std::system( ("mkdir -p output/" + _out_directory  )   .c_str() );  
+  TFile * f_hists = new TFile(  ("output/" + _out_directory + "/output.root").c_str(), "RECREATE" );
  
   for(auto &it1 : _cloned_hists) {
     for(auto &it2 : it1.second) {
