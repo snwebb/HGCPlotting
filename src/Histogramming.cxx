@@ -4,7 +4,7 @@ Samuel Webb
 Imperial College
 ***************************************************************************/
 
-// Time-stamp: <2018-11-01 14:42:17 (snwebb)>
+// Time-stamp: <2018-11-01 15:09:20 (snwebb)>
 
 #include "HGCPlotting.h"
 
@@ -19,6 +19,13 @@ void HGCPlotting::MakeAllHistograms( std::vector<std::string> &HistoSets){
 }
 
 void HGCPlotting::LoadHistoTemplates( std::string name ){
+
+  if ( name == "TriggerCells" ){
+
+    _cloned_hists[ name ] [ "tc_eta" ] = new TH1D ( (name + "_tc_eta").c_str(), "", 100,-5,5 );  
+    _cloned_hists[ name ] [ "tc_phi" ] = new TH1D ( (name + "_tc_phi").c_str(), "", 100,-M_PI,M_PI );  
+
+  }
 
   if ( name == "PU0_General" ){
 
@@ -110,6 +117,16 @@ void HGCPlotting::FillAllHists( std::string name ){
   CalculateTriggerCellVariables();
   
   //  if ( name == "PU0" ||  name == "PU200" ){
+
+  if ( name == "TriggerCells" ){
+
+    for (unsigned int i = 0; i < tc_eta->size(); i++){
+      _cloned_hists[ name ] [ "tc_eta" ] ->Fill ( tc_eta->at(i) );
+      _cloned_hists[ name ] [ "tc_phi" ] ->Fill ( tc_phi->at(i) );
+    }
+
+  }
+
 
   if ( name == "PU0_General" ){
 
