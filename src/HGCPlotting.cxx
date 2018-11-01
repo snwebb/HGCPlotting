@@ -4,17 +4,27 @@ Samuel Webb
 Imperial College
 ***************************************************************************/
 
-// Time-stamp: <2018-10-31 13:15:04 (snwebb)>
+// Time-stamp: <2018-11-01 13:44:34 (snwebb)>
 
 #include "HGCPlotting.h"
 
 HGCPlotting::HGCPlotting( CmdLine * cmd ){
 
-  _cmd = cmd;
+  _cmd = cmd; 
   _origDir = gDirectory ;
   _in_directory = _cmd->string_val( "--in_directory" ) ;
   _out_directory = _cmd->string_val( "--out_directory" ) ;
   _max_events =  _cmd->int_val( "--max_events"  , -1);
+
+
+
+
+  _HistoSets.push_back( "PU0_General" );
+  _HistoSets.push_back( "PU0_forward" );
+  _HistoSets.push_back( "PU0_backward" );
+
+
+
 }
 
 
@@ -41,16 +51,16 @@ void HGCPlotting::SetupFillHistograms(){
 
   _chain   = new TChain ( "hgcalTriggerNtuplizer/HGCalTriggerNtuple"   );
 
+  //  std::string remotedir = "root://cms-xrd-global.cern.ch//store/user/sawebb/SingleGammaPt25Eta1p6_2p8/crab_SingleGammaPt25_PU0-stc/181025_100629/0000/";
 
   for ( int i = 1; i < 10; i++ ){
-    if (FileExists( (_in_directory + "/ntuples/ntuple_" + std::to_string(i) + ".root"   ).c_str()  )  )   
-      _chain  ->Add ( (_in_directory + "/ntuples/ntuple_" + std::to_string(i) + ".root"   ).c_str() );
+    //    if (FileExists( (_in_directory + "/ntuples/ntuple_" + std::to_string(i) + ".root"   ).c_str()  )  )   
+    //      _chain  ->Add ( (_in_directory + "/ntuples/ntuple_" + std::to_string(i) + ".root"   ).c_str() );
+      _chain  ->Add ( (_in_directory + "/ntuple_" + std::to_string(i) + ".root"   ).c_str() );
   }
 
 
-
-
-  MakeAllHistograms();
+  MakeAllHistograms( _HistoSets );
 
 
 
@@ -85,6 +95,9 @@ void HGCPlotting::Loop( ){
   fChain->SetBranchStatus("tc_n",1);
   fChain->SetBranchStatus("tc_pt",1);
   fChain->SetBranchStatus("tc_phi",1);
+  fChain->SetBranchStatus("tc_eta",1);
+
+  fChain->SetBranchStatus("gen_phi",1);
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -100,8 +113,11 @@ void HGCPlotting::Loop( ){
       if ( jentry > _max_events ) break;
     }
 
-    FillAllHists( "Default" );
 
+
+    for (auto& names : _HistoSets ){
+      FillAllHists( names );
+    }
 
 
 

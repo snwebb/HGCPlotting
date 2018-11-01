@@ -21,6 +21,7 @@ Imperial College
 #include <TF1.h>
 #include <TFitResult.h>
 #include <TRandom3.h>
+#include <TVector2.h>
 #include <THStack.h>
 #include <TCanvas.h>
 #include <TLegend.h>
@@ -44,7 +45,7 @@ class HGCPlotting : public BuildTreeBase {
   TDirectory * _origDir ;
   
   int _max_events;
-
+  std::vector<std::string> _HistoSets;
   TChain * _chain    ;  
 
 
@@ -66,13 +67,15 @@ class HGCPlotting : public BuildTreeBase {
 
   void SetupFillHistograms();
 
-  void MakeAllHistograms();
+  void LoadHistoTemplates( std::string name );
+
+  void MakeAllHistograms( std::vector<std::string> &HistoSets);
 
   void Loop();
 
   void Fill();
 
-  void CalculateVariables();
+  void CalculateTriggerCellVariables();
 
   void FillAllHists( std::string name );
 
