@@ -17,3 +17,6 @@ Define a new histogram set in the `LoadHistoTemplates` function in `src/Histogra
 The histograms are filled in the `FillAllHists` function.
 The histograms can be filled directly with variables from the input tree, or with custom variables defined in the function `CalculateTriggerCellVariables` and saved into the `_event_variables` map. 
 More functions can be added for specific calculations.
+
+## Important notes
+- The branches/leaves of the input ntuple you want to analyse are turned on or off using `SetBranchStatus` in `src/HGCPlotting.cxx`. A minimal number are turned on by default for speed purposes.
