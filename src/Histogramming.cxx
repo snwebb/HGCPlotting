@@ -4,7 +4,7 @@ Samuel Webb
 Imperial College
 ***************************************************************************/
 
-// Time-stamp: <2018-11-01 15:09:20 (snwebb)>
+// Time-stamp: <2018-11-05 11:25:41 (snwebb)>
 
 #include "HGCPlotting.h"
 
@@ -48,7 +48,7 @@ void HGCPlotting::LoadHistoTemplates( std::string name ){
     _cloned_hists[ name ] [ "tc_n" ] = new TH1D ( (name + "_tc_n").c_str(), "", 100,0,1000 );  
     _cloned_hists[ name ] [ "ex_sum" ] = new TH1D ( (name + "_ex_sum").c_str(), "", 150,-50,50);
     _cloned_hists[ name ] [ "ey_sum" ] = new TH1D ( (name + "_ey_sum").c_str(), "", 150,-50,50);
-    _cloned_hists[ name ] [ "er_sum" ] = new TH1D ( (name + "_er_sum").c_str(), "", 150,0,2);
+    _cloned_hists[ name ] [ "er_sum" ] = new TH1D ( (name + "_er_sum").c_str(), "", 150,0,50);
     _cloned_hists[ name ] [ "ephi_sum" ] = new TH1D ( (name + "_ephi_sum").c_str(), "", 150,-M_PI,M_PI);
     _cloned_hists[ name ] [ "dphi_met" ] = new TH1D ( (name + "_dphi_met").c_str(), "", 150,-0.05,0.05);
   
@@ -80,7 +80,6 @@ void HGCPlotting::CalculateTriggerCellVariables(  ){
   }
 
   double ersum_forward = std::sqrt( exsum_forward*exsum_forward + eysum_forward*eysum_forward );
-
   double ersum_backward = std::sqrt( exsum_backward*exsum_backward + eysum_backward*eysum_backward );
   double ephisum_forward = std::atan2( eysum_forward, exsum_forward );
   double ephisum_backward = std::atan2( eysum_backward, exsum_backward );

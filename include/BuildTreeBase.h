@@ -348,18 +348,6 @@ class BuildTreeBase {
 #ifdef BuildTreeBase_cxx
 BuildTreeBase::BuildTreeBase(TTree *tree) : fChain(0) 
 {
-// if parameter tree is not specified (or zero), connect the file
-// used to generate this class and read the Tree.
-   if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/vols/cms/snwebb/HGC_ntuples/SingleGammaPt25_PU0_threshold-2/ntuples/ntuple_1.root");
-      if (!f || !f->IsOpen()) {
-         f = new TFile("/vols/cms/snwebb/HGC_ntuples/SingleGammaPt25_PU0_threshold-2/ntuples/ntuple_1.root");
-      }
-      TDirectory * dir = (TDirectory*)f->Get("/vols/cms/snwebb/HGC_ntuples/SingleGammaPt25_PU0_threshold-2/ntuples/ntuple_1.root:/hgcalTriggerNtuplizer");
-      dir->GetObject("HGCalTriggerNtuple",tree);
-
-   }
-   Init(tree);
 }
 
 BuildTreeBase::~BuildTreeBase()
